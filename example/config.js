@@ -1,13 +1,19 @@
-{
+module.exports = function () {
+  var host = 'localhost';
+  var port = process.env.PORT || 5001;
+  var endpoint = 'http://' + host + ':' + port;
+  var cdn_url = endpoint + '/cdn/';
+  var backend_url = endpoint + '/backend.html';
+  return {
     "cdn":{
-        "url":"http://localhost:5001/cdn/"
+        "url": cdn_url
     },
     "parameters": {
         "urls": [
             {"pattern": "/pattern/.*-(\\d+)", "names": ["storyId"]}
         ],
         "servers": {
-            "local": "http://localhost:5001"
+            "local": endpoint
         }
     },
     "backend": [
@@ -19,16 +25,16 @@
         {
             "pattern": "/quiet/.*",
             "timeout": "1000",
-            "target":"http://localhost:5001/backend.html",
-            "host":"localhost",
+            "target": backend_url,
+            "host": host,
             "ttl":"10s",
             "quietFailure": true
         },
         {
             "pattern": ".*",
             "timeout": "1000",
-            "target":"http://localhost:5001",
-            "host":"localhost",
+            "target": endpoint,
+            "host": host,
             "ttl":"10s",
             "cacheKey":"backend:{{url:path}}",
             "dontPassUrl": false,
@@ -49,14 +55,15 @@
         "errorThreshold": 20,
         "volumeThreshold": 5,
         "includePath":true,
-        "publishToRedis":"redis://localhost:6379?db=0"
+        "publishToRedis":"redis://redis:6379?db=0"
     },
     "cache": {
         "engine": "redis",
-        "url":"redis://localhost:6379?db=0",
+        "url":"redis://redis:6379?db=0",
         "apiEnabled": true
     },
     "hogan": {
         "delimiters": "{{ }}"
     }
-}
+  }
+};

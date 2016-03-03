@@ -1,7 +1,7 @@
 'use strict';
 
 var cx = require('../');
-var config = require('./config.json')
+var config = require('./config.js')();
 var connect = require('connect');
 var cookieParser = require('cookie-parser');
 var query = require('connect-query');
@@ -41,9 +41,9 @@ server.use(cookieParser());
 server.use(query());
 if(process.env.logging !== 'false') { server.use(morgan('combined')); }
 server.use(compoxureMiddleware);
+var host = '0.0.0.0';
+var port = process.env.PORT || 5000;
 
-server.listen(5000, 'localhost', function() {
-    console.log('Example compoxure server on http://localhost:5000');
+server.listen(port, host, function() {
+    console.log('Example compoxure server on ', host, port);
 });
-
-

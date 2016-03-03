@@ -75,6 +75,9 @@ server.use(connectRoute(function (router) {
 
 }));
 
-server.listen(5001, 'localhost', function() {
-    console.log('Example backend server on http://localhost:5001');
+var host = '0.0.0.0';
+var port = process.env.PORT || 5001;
+
+server.listen(port, host, function() {
+    console.log('Example backend server on ', host, port);
 });

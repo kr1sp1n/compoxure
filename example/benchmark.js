@@ -4,6 +4,9 @@
 var async = require('async');
 var request = require('request');
 var nrequests = 5000;
+var host = 'dockerhost';
+var port = 5001;
+var backend_url = 'http://' + host + ':' + port + '/backend.html';
 
 function runBackendBenchmark(next) {
 
@@ -11,7 +14,7 @@ function runBackendBenchmark(next) {
 	async.whilst(
 	    function () { return count < nrequests; },
 	    function (callback) {
-	        request({url: 'http://localhost:5001/backend.html', headers:{'Accept':'text/html'}}, function (error, response) {
+	        request({url: backend_url, headers:{'Accept':'text/html'}}, function (error, response) {
 			  if (!error && response.statusCode == 200) {
 			  	count++;
 			    callback();
@@ -32,7 +35,7 @@ function runProxyBenchmark(next) {
 	    function () { return count < nrequests; },
 	    function (callback) {
 	        count++;
-	        request({url: 'http://localhost:5000/backend.html', headers:{'Accept':'text/html'}}, function (error, response) {
+	        request({url: backend_url, headers:{'Accept':'text/html'}}, function (error, response) {
 			  if (!error && response.statusCode == 200) {
 			    callback();
 			  }
